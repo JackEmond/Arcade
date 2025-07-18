@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jacks Arcade</title>
+    <link rel="stylesheet" href="styles.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <script src="main.js"></script>
+  </head>
+  <body onload="loadScreen('game-selector')">
+    <!-- Main container for the arcade machine -->
+    <div class="arcade-machine">
+      <!-- Top banner with the title -->
+      <header class="banner">
+        <h1>Jacks Arcade</h1>
+      </header>
+
+      <!-- Screen area -->
+      <div class="screen-area">
+        <div class="screen" id="screen">
+          <!--<button class="start-button">Start Game</button>-->
+        </div>
+      </div>
+
+      <!-- Control panel with joystick and buttons -->
+      <div class="control-panel">
+        <div class="joystick">
+          <div class="joystick-base"></div>
+          <div class="joystick-stick"></div>
+          <div class="joystick-ball"></div>
+        </div>
+        <div class="buttons">
+          <button class="arcade-button btn-blue"></button>
+          <button class="arcade-button btn-green"></button>
+          <button class="arcade-button btn-yellow"></button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
