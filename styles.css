@@ -3,12 +3,12 @@ body {
   font-family: "Press Start 2P", cursive;
   background-color: #1a1a1d;
   background-image: radial-gradient(circle, #4c4c4c 1px, transparent 1px);
-  background-size: 10px 10px;
+  background-size: 3vh 3vh;
   display: flex;
   justify-content: center;
   align-items: center;
   max-height: 100vh;
-  padding: 2rem 0;
+  padding: 2vh 1vw;
   overflow: hidden;
   margin: 0; /* Reset default body margin */
 }
@@ -16,7 +16,7 @@ body {
 /* The main arcade machine cabinet */
 .arcade-machine {
   background: linear-gradient(to bottom, #2c3e50, #233140);
-  border: 10px solid #1a252f;
+  border: 2vh solid #1a252f;
   border-radius: 20px;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(0, 0, 0, 0.5);
   width: 90%;
@@ -30,7 +30,7 @@ body {
 /* The top banner with the game title */
 .banner {
   background: linear-gradient(135deg, #ff416c, #ff4b2b);
-  padding: 20px;
+  padding: 10px;
   text-align: center;
   border-bottom: 8px solid #1a252f;
   position: relative;
@@ -61,7 +61,6 @@ body {
 /* The screen area */
 .screen-area {
   background-color: #1a252f;
-  padding: 5px 25px;
 }
 
 .screen {
