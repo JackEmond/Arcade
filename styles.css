@@ -38,7 +38,7 @@ body {
 
 .banner h1 {
   color: #fff;
-  font-size: 1.5rem;
+  font-size: 1rem;
   text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000,
     -1px 1px 0 #000, 1px 1px 0 #000;
   animation: glow 1.5s ease-in-out infinite alternate;
@@ -214,7 +214,7 @@ body {
 .header-title {
   font-family: "Press Start 2P", cursive;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
   line-height: 1.2;
 }
@@ -227,30 +227,34 @@ body {
 /* Game Grid Layout */
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
-  margin-top: 40px;
+  margin-top: 20px;
+  height: 45vh;
 }
-
 /* Game Card Styles */
 .game-card {
   background-color: #1f2937; /* bg-gray-800 */
   border-radius: 0.75rem; /* rounded-xl */
   overflow: hidden;
-  display: block;
-  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   border: 3px solid #2c2c2c;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.game-card h3 {
+  font-family: "Press Start 2P", cursive;
+  color: #ffffff;
+  text-align: center;
+  font-size: 1.2rem;
 }
 
 .game-card:hover {
   transform: scale(1.05) translateY(-10px);
   border-color: #00ffff;
   box-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff, inset 0 0 10px #00ffff44;
-}
-
-.card-image-container {
-  aspect-ratio: 3 / 4;
 }
 
 .card-image-container img {
@@ -265,13 +269,6 @@ body {
   text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
 }
 
-/* Responsive Media Queries */
-@media (min-width: 640px) {
-  /* sm breakpoint */
-  .game-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
 @media (min-width: 1024px) {
   .game-grid {
     grid-template-columns: repeat(4, 1fr);
