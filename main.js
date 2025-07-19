@@ -13,30 +13,37 @@ async function loadScreen(link) {
 
     // Put the fetched HTML into the screen
     gameScreen.innerHTML = gameHtml;
-
-    // Run game-specific JavaScript
-    // Remove the old game's script to prevent conflicts
-    if (currentGameScript) {
-      currentGameScript.remove();
-    }
-
-    // Create a new script element
-    const script = document.createElement("script");
-
-    // Set its source to the game's JS file
-    script.src = `${link}.js`;
-
-    // Give it an ID so we can find it and remove it later
-    script.id = "game-script";
-
-    // Append the script to the body to execute it
-    document.body.appendChild(script);
-
-    // Store a reference to the new script
-    currentGameScript = script;
   } catch (error) {
     console.error("Failed to load game:", error);
     const gameScreen = document.getElementById("screen");
     gameScreen.innerHTML = `<p>Error loading game. Please try again.</p>`;
   }
+}
+
+async function loadGame(link) {
+  await loadScreen(link);
+  await loadGameScript(link);
+}
+
+let currentGameScript = null;
+
+async function loadGameScript(link) {
+  if (currentGameScript) {
+    currentGameScript.remove();
+  }
+
+  // Create a new script element
+  const script = document.createElement("script");
+
+  // Set its source to the game's JS file
+  script.src = `${link}.js`;
+
+  // Give it an ID so we can find it and remove it later
+  script.id = "game-script";
+
+  // Append the script to the body to execute it
+  document.body.appendChild(script);
+
+  // Store a reference to the new script
+  currentGameScript = script;
 }
