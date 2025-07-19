@@ -1,49 +1,47 @@
-// ... (button click listener is the same as above) ...
-
-async function loadScreen(link) {
-  try {
-    // Get the screen element when the function is called
-    const gameScreen = document.getElementById("screen");
-
-    // Fetch the content of the game's HTML file
-    const response = await fetch(`${link}.html`);
-    if (!response.ok) throw new Error("Network response was not ok");
-
-    const gameHtml = await response.text();
-
-    // Put the fetched HTML into the screen
-    gameScreen.innerHTML = gameHtml;
-  } catch (error) {
-    console.error("Failed to load game:", error);
-    const gameScreen = document.getElementById("screen");
-    gameScreen.innerHTML = `<p>Error loading game. Please try again.</p>`;
-  }
-}
-
-async function loadGame(link) {
-  await loadScreen(link);
-  await loadGameScript(link);
-}
-
 let currentGameScript = null;
 
-async function loadGameScript(link) {
+async function loadScreen(pageId) {
+  const screen = document.getElementById("screen");
+  console.log(`Loading screen for: ${pageId}`);
+
+  // --- 1. CLEAN UP THE PREVIOUS GAME (if one was active) ---
+  if (window.currentGameInstance) {
+    window.currentGameInstance.destroy();
+    window.currentGameInstance = null;
+  }
   if (currentGameScript) {
     currentGameScript.remove();
+    currentGameScript = null;
   }
 
-  // Create a new script element
+  // --- 2. LOAD THE NEW HTML CONTENT ---
+  try {
+    const response = await fetch(`${pageId}.html`);
+    if (!response.ok) throw new Error("Network response was not ok");
+    screen.innerHTML = await response.text();
+  } catch (error) {
+    console.error("Failed to load page:", error);
+    screen.innerHTML = `<p>Error loading content. Please try again.</p>`;
+  }
+}
+
+function loadGameScript(gameId) {
+  console.log(`Loading game script for: ${gameId}`);
+
   const script = document.createElement("script");
-
-  // Set its source to the game's JS file
-  script.src = `${link}.js`;
-
-  // Give it an ID so we can find it and remove it later
+  script.src = `${gameId}.js`;
   script.id = "game-script";
-
-  // Append the script to the body to execute it
   document.body.appendChild(script);
 
-  // Store a reference to the new script
+  // Store a reference to this script so it can be cleaned up next time
   currentGameScript = script;
+}
+
+/**
+ * Loads pages that ARE games by combining the two functions above.
+ * For game pages, you will call this function.
+ */
+async function loadGame(gameId) {
+  await loadScreen(gameId); // This clears the old game and loads the new HTML
+  loadGameScript(gameId); // This loads the new game's script
 }

@@ -1,133 +1,109 @@
-// --- DOM Elements ---
-const board = document.getElementById("board");
-const cells = document.querySelectorAll("[data-cell-index]");
-const gameStatus = document.getElementById("gameStatus");
-const restartButton = document.getElementById("restartButton");
+if (!window.TicTacToeGame) {
+  window.TicTacToeGame = class TicTacToeGame {
+    constructor() {
+      this.board = document.getElementById("board");
+      this.cells = document.querySelectorAll("[data-cell-index]");
+      this.gameStatus = document.getElementById("gameStatus");
+      this.restartButton = document.getElementById("restartButton");
 
-// --- Game State Variables ---
-let gameActive = true;
-let currentPlayer = "X";
-let gameState = ["", "", "", "", "", "", "", "", ""];
+      this.winningConditions = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+      ];
 
-// --- Winning Combinations ---
-const winningConditions = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  [0, 4, 8],
-  [2, 4, 6],
-];
+      this.boundCellClick = this.handleCellClick.bind(this);
+      this.boundRestartGame = this.handleRestartGame.bind(this);
 
-// --- Messages ---
-const winningMessage = () => `Player ${currentPlayer} Wins!`;
-const drawMessage = () => `Game Ended in a Draw!`;
-const currentPlayerTurn = () => `Player ${currentPlayer}'s Turn`;
-
-// --- Functions ---
-
-/**
- * Handles a click on a cell.
- * @param {MouseEvent} e - The click event.
- */
-function handleCellClick(e) {
-  const clickedCell = e.target;
-  const clickedCellIndex = parseInt(
-    clickedCell.getAttribute("data-cell-index")
-  );
-
-  // If the cell is already played or the game is over, ignore the click
-  if (gameState[clickedCellIndex] !== "" || !gameActive) {
-    return;
-  }
-
-  // Process the move
-  handleCellPlayed(clickedCell, clickedCellIndex);
-  handleResultValidation();
-}
-
-/**
- * Updates the game state and UI for a played cell.
- * @param {HTMLElement} clickedCell - The cell element that was clicked.
- * @param {number} clickedCellIndex - The index of the clicked cell.
- */
-function handleCellPlayed(clickedCell, clickedCellIndex) {
-  gameState[clickedCellIndex] = currentPlayer;
-  clickedCell.textContent = currentPlayer;
-  clickedCell.classList.add(currentPlayer.toLowerCase());
-}
-
-/**
- * Checks if the game has been won, drawn, or should continue.
- */
-function handleResultValidation() {
-  let roundWon = false;
-  let winningCombo = [];
-  for (let i = 0; i < winningConditions.length; i++) {
-    const winCondition = winningConditions[i];
-    let a = gameState[winCondition[0]];
-    let b = gameState[winCondition[1]];
-    let c = gameState[winCondition[2]];
-
-    if (a === "" || b === "" || c === "") {
-      continue;
+      this.init();
     }
-    if (a === b && b === c) {
-      roundWon = true;
-      winningCombo = winCondition;
-      break;
+
+    // --- Messages ---
+    winningMessage = () => `Player ${this.currentPlayer} Wins!`;
+    drawMessage = () => `Game Ended in a Draw!`;
+    currentPlayerTurn = () => `Player ${this.currentPlayer}'s Turn`;
+
+    init() {
+      this.gameActive = true;
+      this.currentPlayer = "X";
+      this.gameState = ["", "", "", "", "", "", "", "", ""];
+      this.gameStatus.textContent = this.currentPlayerTurn();
+      this.cells.forEach((cell) => {
+        cell.textContent = "";
+        cell.classList.remove("x", "o", "win");
+      });
+      this.cells.forEach((cell) =>
+        cell.addEventListener("click", this.boundCellClick)
+      );
+      this.restartButton.addEventListener("click", this.boundRestartGame);
     }
-  }
 
-  if (roundWon) {
-    gameStatus.textContent = winningMessage();
-    gameActive = false;
-    // Highlight the winning cells
-    winningCombo.forEach((index) => {
-      cells[index].classList.add("win");
-    });
-    return;
-  }
+    handleCellClick(e) {
+      const clickedCell = e.target;
+      const clickedCellIndex = parseInt(
+        clickedCell.getAttribute("data-cell-index")
+      );
+      if (this.gameState[clickedCellIndex] !== "" || !this.gameActive) return;
+      this.handleCellPlayed(clickedCell, clickedCellIndex);
+      this.handleResultValidation();
+    }
 
-  // Check for a draw
-  let roundDraw = !gameState.includes("");
-  if (roundDraw) {
-    gameStatus.textContent = drawMessage();
-    gameActive = false;
-    return;
-  }
+    handleCellPlayed(clickedCell, clickedCellIndex) {
+      this.gameState[clickedCellIndex] = this.currentPlayer;
+      clickedCell.textContent = this.currentPlayer;
+      clickedCell.classList.add(this.currentPlayer.toLowerCase());
+    }
 
-  // If no win or draw, switch the player
-  handlePlayerChange();
+    handleResultValidation() {
+      let roundWon = false;
+      let winningCombo = [];
+      for (const winCondition of this.winningConditions) {
+        let a = this.gameState[winCondition[0]];
+        let b = this.gameState[winCondition[1]];
+        let c = this.gameState[winCondition[2]];
+        if (a === "" || b === "" || c === "") continue;
+        if (a === b && b === c) {
+          roundWon = true;
+          winningCombo = winCondition;
+          break;
+        }
+      }
+      if (roundWon) {
+        this.gameStatus.textContent = this.winningMessage();
+        this.gameActive = false;
+        winningCombo.forEach((index) => this.cells[index].classList.add("win"));
+        return;
+      }
+      if (!this.gameState.includes("")) {
+        this.gameStatus.textContent = this.drawMessage();
+        this.gameActive = false;
+        return;
+      }
+      this.handlePlayerChange();
+    }
+
+    handlePlayerChange() {
+      this.currentPlayer = this.currentPlayer === "X" ? "O" : "X";
+      this.gameStatus.textContent = this.currentPlayerTurn();
+    }
+
+    handleRestartGame() {
+      this.init();
+    }
+
+    destroy() {
+      console.log("Tic Tac Toe Destroyed!");
+      this.cells.forEach((cell) =>
+        cell.removeEventListener("click", this.boundCellClick)
+      );
+      this.restartButton.removeEventListener("click", this.boundRestartGame);
+    }
+  };
 }
 
-/**
- * Switches the current player and updates the status display.
- */
-function handlePlayerChange() {
-  currentPlayer = currentPlayer === "X" ? "O" : "X";
-  gameStatus.textContent = currentPlayerTurn();
-}
-
-/**
- * Resets the game to its initial state.
- */
-function handleRestartGame() {
-  gameActive = true;
-  currentPlayer = "X";
-  gameState = ["", "", "", "", "", "", "", "", ""];
-  gameStatus.textContent = currentPlayerTurn();
-  cells.forEach((cell) => {
-    cell.textContent = "";
-    cell.classList.remove("x", "o", "win");
-  });
-}
-
-// --- Event Listeners ---
-cells.forEach((cell) => cell.addEventListener("click", handleCellClick));
-restartButton.addEventListener("click", handleRestartGame);
-
-// --- Initial Setup ---
-gameStatus.textContent = currentPlayerTurn();
+window.currentGameInstance = new window.TicTacToeGame();
