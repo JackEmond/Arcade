@@ -61,6 +61,7 @@ body {
 /* The screen area */
 .screen-area {
   background-color: #1a252f;
+  position: relative;
 }
 
 .screen {
@@ -248,7 +249,7 @@ body {
   font-family: "Press Start 2P", cursive;
   color: #ffffff;
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 0.8rem;
 }
 
 .game-card:hover {
