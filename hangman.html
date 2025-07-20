@@ -9,27 +9,20 @@
     --bg-medium: #1a1a1a;
   }
 
-  .game-container {
+  .hangman-container {
     width: 100%;
-    max-width: 900px;
-    height: 75vh;
-    max-height: 600px;
-    background: var(--bg-medium);
-    border: 3px solid var(--glow-color-border);
-    box-shadow: 0 0 15px var(--glow-color-border),
-      inset 0 0 10px var(--glow-color-border);
-    border-radius: 15px;
-    padding: 1.5rem;
+    height: 60vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
 
   /* Header */
-  .header-title {
+  .hangman-container .header-title {
     font-family: "Press Start 2P", cursive;
     text-align: center;
     font-size: 2rem;
+    max-width: 100%;
     color: var(--glow-color-primary);
     text-shadow: 0 0 5px #fff, 0 0 10px var(--glow-color-primary);
     margin-bottom: 1rem;
@@ -187,9 +180,8 @@
 
   /* Responsive */
   @media (max-width: 768px) {
-    .game-container {
-      height: auto;
-      max-height: 90vh;
+    .hangman-container {
+      max-height: 50vh;
     }
     .game-main {
       flex-direction: column;
@@ -223,7 +215,7 @@
   }
 </style>
 
-<div class="game-container">
+<div class="hangman-container">
   <h1 class="header-title">HANGMAN</h1>
 
   <div class="game-main">
