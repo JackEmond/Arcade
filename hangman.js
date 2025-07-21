@@ -1,134 +1,144 @@
-// --- DOM Elements ---
-const wordDisplay = document.getElementById("wordDisplay");
-const keyboardContainer = document.getElementById("keyboard");
-const hangmanParts = document.querySelectorAll(".hangman-part");
-const popupContainer = document.getElementById("popupContainer");
-const finalMessage = document.getElementById("finalMessage");
-const finalMessageRevealWord = document.getElementById(
-  "finalMessageRevealWord"
-);
-const playAgainButton = document.getElementById("playAgainButton");
+export class HangmanGame {
+  constructor() {
+    // --- DOM Elements ---
+    this.wordDisplay = document.getElementById("wordDisplay");
+    this.keyboardContainer = document.getElementById("keyboard");
+    this.hangmanParts = document.querySelectorAll(".hangman-part");
+    this.popupContainer = document.getElementById("popupContainer");
+    this.finalMessage = document.getElementById("finalMessage");
+    this.finalMessageRevealWord = document.getElementById(
+      "finalMessageRevealWord"
+    );
+    this.playAgainButton = document.getElementById("playAgainButton");
 
-// --- Game Data & State ---
-const words = [
-  "JAVASCRIPT",
-  "INTERFACE",
-  "ARCADE",
-  "NEON",
-  "STYLESHEET",
-  "DEVELOPER",
-  "ALGORITHM",
-];
-let selectedWord = "";
-let correctLetters = [];
-let wrongGuesses = 0;
-const maxWrongGuesses = 6;
+    // --- Game Data ---
+    this.words = [
+      "JAVASCRIPT",
+      "INTERFACE",
+      "ARCADE",
+      "NEON",
+      "STYLESHEET",
+      "DEVELOPER",
+      "ALGORITHM",
+    ];
+    this.maxWrongGuesses = 6;
 
-// --- Functions ---
+    // Bind 'this' to event handlers
+    this.boundStartGame = this.startGame.bind(this);
+    this.boundHandleGuess = this.handleGuess.bind(this);
 
-/**
- * Starts a new game or restarts the current one.
- */
-function startGame() {
-  // Reset state
-  correctLetters = [];
-  wrongGuesses = 0;
-
-  // Select a new word
-  selectedWord = words[Math.floor(Math.random() * words.length)];
-
-  // Reset UI
-  displayWord();
-  createKeyboard();
-  updateFigure();
-  popupContainer.classList.remove("visible");
-}
-
-/**
- * Renders the word display with underscores and correct letters.
- */
-function displayWord() {
-  wordDisplay.innerHTML = selectedWord
-    .split("")
-    .map(
-      (letter) =>
-        `<div class="letter">${
-          correctLetters.includes(letter) ? letter : ""
-        }</div>`
-    )
-    .join("");
-
-  // Check for win
-  const innerWord = wordDisplay.innerText.replace(/\n/g, "");
-  if (innerWord === selectedWord) {
-    showPopup(true);
+    // Initial Game Start
+    this.startGame();
   }
-}
 
-/**
- * Creates the on-screen keyboard.
- */
-function createKeyboard() {
-  keyboardContainer.innerHTML = ""; // Clear previous keyboard
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach((letter) => {
-    const key = document.createElement("button");
-    key.className = "key";
-    key.textContent = letter;
-    key.addEventListener("click", () => handleGuess(letter));
-    keyboardContainer.appendChild(key);
-  });
-}
+  /**
+   * Starts a new game or restarts the current one.
+   */
+  startGame() {
+    // Reset state
+    this.correctLetters = [];
+    this.wrongGuesses = 0;
+    this.selectedWord =
+      this.words[Math.floor(Math.random() * this.words.length)];
 
-/**
- * Handles a player's letter guess.
- * @param {string} letter - The letter that was guessed.
- */
-function handleGuess(letter) {
-  // Disable the clicked key
-  const keys = document.querySelectorAll(".key");
-  keys.forEach((key) => {
-    if (key.textContent === letter) {
-      key.disabled = true;
+    // Reset UI
+    this.displayWord();
+    this.createKeyboard();
+    this.updateFigure();
+    this.popupContainer.classList.remove("visible");
+
+    // Ensure the event listener is attached
+    this.playAgainButton.removeEventListener("click", this.boundStartGame); // remove previous before adding
+    this.playAgainButton.addEventListener("click", this.boundStartGame);
+  }
+
+  /**
+   * Renders the word display with underscores and correct letters.
+   */
+  displayWord() {
+    this.wordDisplay.innerHTML = this.selectedWord
+      .split("")
+      .map(
+        (letter) =>
+          `<div class="letter">${
+            this.correctLetters.includes(letter) ? letter : ""
+          }</div>`
+      )
+      .join("");
+
+    // Check for win
+    const innerWord = this.wordDisplay.innerText.replace(/\n/g, "");
+    if (innerWord === this.selectedWord) {
+      this.showPopup(true);
     }
-  });
+  }
 
-  if (selectedWord.includes(letter)) {
-    // Correct guess
-    correctLetters.push(letter);
-    displayWord();
-  } else {
-    // Wrong guess
-    wrongGuesses++;
-    updateFigure();
+  /**
+   * Creates the on-screen keyboard.
+   */
+  createKeyboard() {
+    this.keyboardContainer.innerHTML = ""; // Clear previous keyboard
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach((letter) => {
+      const key = document.createElement("button");
+      key.className = "key";
+      key.textContent = letter;
+      key.addEventListener("click", () => this.boundHandleGuess(letter, key));
+      this.keyboardContainer.appendChild(key);
+    });
+  }
+
+  /**
+   * Handles a player's letter guess.
+   * @param {string} letter - The letter that was guessed.
+   * @param {HTMLElement} keyElement - The button element that was clicked.
+   */
+  handleGuess(letter, keyElement) {
+    // Disable the clicked key
+    keyElement.disabled = true;
+
+    if (this.selectedWord.includes(letter)) {
+      // Correct guess
+      this.correctLetters.push(letter);
+      this.displayWord();
+    } else {
+      // Wrong guess
+      this.wrongGuesses++;
+      this.updateFigure();
+    }
+  }
+
+  /**
+   * Updates the hangman drawing based on the number of wrong guesses.
+   */
+  updateFigure() {
+    this.hangmanParts.forEach((part, index) => {
+      part.classList.toggle("visible", index < this.wrongGuesses);
+    });
+
+    // Check for loss
+    if (this.wrongGuesses >= this.maxWrongGuesses) {
+      this.showPopup(false);
+    }
+  }
+
+  /**
+   * Shows the final win/loss popup message.
+   * @param {boolean} isWin - Whether the player won or lost.
+   */
+  showPopup(isWin) {
+    this.finalMessage.textContent = isWin ? "YOU WIN!" : "GAME OVER";
+    this.finalMessageRevealWord.textContent = `The word was: ${this.selectedWord}`;
+    this.popupContainer.classList.add("visible");
+  }
+
+  /**
+   * Cleans up event listeners when the game is removed.
+   */
+  destroy() {
+    console.log("Hangman Destroyed!");
+    this.playAgainButton.removeEventListener("click", this.boundStartGame);
+    // Note: Keyboard listeners are on elements that get removed anyway,
+    // so cleaning them up is less critical, but removing the playAgainButton
+    // listener is important.
   }
 }
-
-/**
- * Updates the hangman drawing based on the number of wrong guesses.
- */
-function updateFigure() {
-  hangmanParts.forEach((part, index) => {
-    part.classList.toggle("visible", index < wrongGuesses);
-  });
-
-  // Check for loss
-  if (wrongGuesses >= maxWrongGuesses) {
-    showPopup(false);
-  }
-}
-
-/**
- * Shows the final win/loss popup message.
- * @param {boolean} isWin - Whether the player won or lost.
- */
-function showPopup(isWin) {
-  finalMessage.textContent = isWin ? "YOU WIN!" : "GAME OVER";
-  finalMessageRevealWord.textContent = `The word was: ${selectedWord}`;
-  popupContainer.classList.add("visible");
-}
-
-// --- Event Listeners ---
-playAgainButton.addEventListener("click", startGame);
-
-// --- Initial Game Start ---
-startGame();
