@@ -240,3 +240,23 @@ body {
     gap: 3rem;
   }
 }
+
+.back-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+  font-family: "Press Start 2P", cursive;
+  background-color: #2a0967;
+  color: #fff;
+  border: 3px solid #16213e;
+  padding: 5px 5px;
+  font-size: 14px;
+
+  /* 8-bit style "3D" shadow */
+  box-shadow: 4px 4px 0px #16213e;
+
+  /* Make hover/active effects smooth */
+  transition: transform 0.1s, box-shadow 0.1s;
+  cursor: pointer;
+}
