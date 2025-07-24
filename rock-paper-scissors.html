@@ -61,6 +61,13 @@
     width: 100%;
     margin-bottom: 1.5rem;
   }
+
+  .match-display img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+  }
+
   .player-choice,
   .computer-choice {
     font-size: 6rem;
@@ -72,6 +79,7 @@
     border: 3px dashed #444;
     border-radius: 10px;
   }
+
   .vs {
     font-family: "Press Start 2P", cursive;
     font-size: 3rem;
@@ -113,6 +121,11 @@
     background-color: var(--glow-color-border);
     transform: scale(1.05);
     box-shadow: 0 0 15px var(--glow-color-border);
+  }
+
+  .choice-btn img {
+    width: 80px;
+    height: 80px;
   }
 
   /* Responsive */
@@ -157,6 +170,7 @@
     }
   }
 </style>
+<button class="back-button" onclick="loadScreen('game-selector')">←</button>
 
 <div class="game-container">
   <h1 class="header-title">ROCK PAPER SCISSORS</h1>
@@ -181,8 +195,14 @@
   <div class="result-message" id="resultMessage">MAKE YOUR MOVE</div>
 
   <div class="choices">
-    <button class="choice-btn" data-choice="rock">✊</button>
-    <button class="choice-btn" data-choice="paper">✋</button>
-    <button class="choice-btn" data-choice="scissors">✌️</button>
+    <button class="choice-btn" data-choice="rock">
+      <img src="images/rock.png" />
+    </button>
+    <button class="choice-btn" data-choice="paper">
+      <img src="images/paper.png" />
+    </button>
+    <button class="choice-btn" data-choice="scissors">
+      <img src="images/scissors.png" />
+    </button>
   </div>
 </div>
