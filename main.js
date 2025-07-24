@@ -23,17 +23,12 @@ async function loadScreen(pageId) {
   }
 }
 
-/**
- * Loads pages that ARE games by loading the HTML and then dynamically
- * importing the corresponding game module.
- */
 async function loadGame(gameId) {
-  // First, load the screen and clean up the old game instance
-  await loadScreen(gameId);
+  await loadScreen("games/" + gameId);
 
   try {
     // Dynamically import the game module using the gameId
-    const gameModule = await import(`./${gameId}.js`);
+    const gameModule = await import(`./games/${gameId}.js`);
 
     // The class name must be consistent. We can create a mapping
     const gameClassName = toPascalCase(gameId) + "Game";
