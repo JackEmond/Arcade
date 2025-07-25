@@ -1,23 +1,26 @@
 <div class="game-selector">
   <!-- Header Title -->
   <h1 class="header-title text-neon">CHOOSE A GAME</h1>
-
   <!-- Game Selection Grid -->
   <div class="game-grid">
-    <div class="game-card" onClick="loadGame('tic-tac-toe')">
+    <div class="game-card tictactoe-card" onClick="loadGame('tic-tac-toe')">
       <h3>Tic Tac Toe</h3>
     </div>
 
-    <div class="game-card" onClick="loadGame('hangman')">
+    <div class="game-card hangman-card" onClick="loadGame('hangman')">
       <h3>Hangman</h3>
     </div>
 
-    <div class="game-card" onClick="loadGame('rock-paper-scissors')">
+    <div
+      class="game-card rockpaperscissors-card"
+      onClick="loadGame('rock-paper-scissors')"
+    >
       <h3>Rock Paper Scissors</h3>
     </div>
 
-    <div class="game-card" onClick="loadGame('rock-paper-scissors')">
-      <h3>Pong</h3>
+    <div class="game-card boxjump-card" onClick="loadGame('box-jump')">
+      <h3>Box Jump</h3>
+      <!-- https://www.lessmilk.com/box-jump/ -->
     </div>
   </div>
 </div>
