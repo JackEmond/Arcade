@@ -120,59 +120,47 @@
     opacity: 0.7;
   }
 
-  /* Game Over Popup */
-  .popup-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+  /* End screens styling */
+  .end-screen {
     display: none;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .popup-container.visible {
-    display: flex;
-  }
-
-  .popup {
-    background: var(--bg-medium);
-    padding: 2rem;
-    border-radius: 10px;
-    border: 2px solid var(--glow-color-primary);
-    box-shadow: 0 0 20px var(--glow-color-primary);
     text-align: center;
   }
 
-  .popup h2 {
+  .end-screen h2 {
     font-family: "Press Start 2P", cursive;
-    font-size: 2rem;
+    font-size: 3rem;
     margin-bottom: 1rem;
+    color: var(--glow-color-primary);
+    text-shadow: 0 0 10px var(--glow-color-primary),
+      0 0 20px var(--glow-color-primary), 0 0 30px var(--glow-color-secondary);
   }
 
-  .popup p {
+  .end-screen p {
     font-size: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    color: #fff;
+    text-shadow: 0 0 5px #fff;
   }
 
-  .popup button {
+  .end-screen button {
     font-family: "Press Start 2P", cursive;
-    font-size: 1rem;
-    padding: 0.8rem 1.5rem;
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
     border: 2px solid var(--glow-color-secondary);
-    background-color: #333;
-    color: #fff;
-    border-radius: 5px;
+    background-color: #111;
+    color: var(--glow-color-secondary);
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
-  }
-  .popup button:hover {
-    background-color: var(--glow-color-secondary);
+    box-shadow: 0 0 5px var(--glow-color-secondary);
   }
 
-  /* Responsive */
+  .end-screen button:hover {
+    background-color: var(--glow-color-secondary);
+    color: #000;
+    box-shadow: 0 0 10px var(--glow-color-secondary),
+      0 0 20px var(--glow-color-secondary);
+  }
   @media (max-width: 768px) {
     .hangman-container {
       max-height: 50vh;
@@ -214,89 +202,85 @@
       font-size: 1.5rem;
     }
   }
+
+  .gamecontent {
+    display: none;
+  }
 </style>
 
 <div class="hangman-container">
   <button class="back-button" onclick="loadScreen('game-selector')">←</button>
 
-  <h1 class="header-title">HANGMAN</h1>
+  <div id="gameContent">
+    <h1 class="header-title">HANGMAN</h1>
 
-  <div class="game-main">
-    <div class="figure-container">
-      <svg class="hangman-svg" viewBox="0 0 250 300">
-        <!-- Gallows -->
-        <line x1="20" y1="280" x2="120" y2="280" />
-        <!-- Base -->
-        <line x1="70" y1="280" x2="70" y2="50" />
-        <!-- Pole -->
-        <line x1="70" y1="50" x2="180" y2="50" />
-        <!-- Beam -->
-        <line x1="180" y1="50" x2="180" y2="90" />
-        <!-- Rope -->
-        <!-- Man -->
-        <circle cx="180" cy="120" r="30" class="hangman-part" id="head" />
-        <!-- Head -->
-        <line
-          x1="180"
-          y1="150"
-          x2="180"
-          y2="210"
-          class="hangman-part"
-          id="body"
-        />
-        <!-- Body -->
-        <line
-          x1="180"
-          y1="170"
-          x2="140"
-          y2="190"
-          class="hangman-part"
-          id="arm-left"
-        />
-        <!-- Left Arm -->
-        <line
-          x1="180"
-          y1="170"
-          x2="220"
-          y2="190"
-          class="hangman-part"
-          id="arm-right"
-        />
-        <!-- Right Arm -->
-        <line
-          x1="180"
-          y1="210"
-          x2="140"
-          y2="240"
-          class="hangman-part"
-          id="leg-left"
-        />
-        <!-- Left Leg -->
-        <line
-          x1="180"
-          y1="210"
-          x2="220"
-          y2="240"
-          class="hangman-part"
-          id="leg-right"
-        />
-        <!-- Right Leg -->
-      </svg>
-    </div>
+    <div class="game-main">
+      <div class="figure-container">
+        <svg class="hangman-svg" viewBox="0 0 250 300">
+          <line x1="20" y1="280" x2="120" y2="280" />
+          <line x1="70" y1="280" x2="70" y2="50" />
+          <line x1="70" y1="50" x2="180" y2="50" />
+          <line x1="180" y1="50" x2="180" y2="90" />
+          <circle cx="180" cy="120" r="30" class="hangman-part" id="head" />
+          <line
+            x1="180"
+            y1="150"
+            x2="180"
+            y2="210"
+            class="hangman-part"
+            id="body"
+          />
+          <line
+            x1="180"
+            y1="170"
+            x2="140"
+            y2="190"
+            class="hangman-part"
+            id="arm-left"
+          />
+          <line
+            x1="180"
+            y1="170"
+            x2="220"
+            y2="190"
+            class="hangman-part"
+            id="arm-right"
+          />
+          <line
+            x1="180"
+            y1="210"
+            x2="140"
+            y2="240"
+            class="hangman-part"
+            id="leg-left"
+          />
+          <line
+            x1="180"
+            y1="210"
+            x2="220"
+            y2="240"
+            class="hangman-part"
+            id="leg-right"
+          />
+        </svg>
+      </div>
 
-    <!-- Word and Keyboard -->
-    <div class="word-keyboard-container">
-      <div class="word-display" id="wordDisplay"></div>
-      <div class="keyboard" id="keyboard"></div>
+      <div class="word-keyboard-container">
+        <div class="word-display" id="wordDisplay"></div>
+        <div class="keyboard" id="keyboard"></div>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Final Message Popup -->
-<div class="popup-container" id="popupContainer">
-  <div class="popup">
-    <h2 id="finalMessage"></h2>
-    <p id="finalMessageRevealWord"></p>
-    <button id="playAgainButton">Play Again</button>
+  <div id="winScreen" class="end-screen">
+    <h2 id="winMessage">YOU WIN!</h2>
+    <p id="winRevealWord">The word was: Programmer</p>
+    <button id="winPlayAgainButton">Play Again</button>
+  </div>
+
+  <div id="loseScreen" class="end-screen">
+    <h2 id="loseMessage">GAME OVER</h2>
+    <p id="loseRevealWord">The word was: Programmer</p>
+    <button id="losePlayAgainButton">Play Again</button>
   </div>
 </div>

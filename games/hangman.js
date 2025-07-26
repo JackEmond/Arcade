@@ -4,12 +4,13 @@ export class HangmanGame {
     this.wordDisplay = document.getElementById("wordDisplay");
     this.keyboardContainer = document.getElementById("keyboard");
     this.hangmanParts = document.querySelectorAll(".hangman-part");
-    this.popupContainer = document.getElementById("popupContainer");
-    this.finalMessage = document.getElementById("finalMessage");
-    this.finalMessageRevealWord = document.getElementById(
-      "finalMessageRevealWord"
-    );
-    this.playAgainButton = document.getElementById("playAgainButton");
+    this.gameContent = document.getElementById("gameContent");
+    this.winScreen = document.getElementById("winScreen");
+    this.loseScreen = document.getElementById("loseScreen");
+    this.winRevealWord = document.getElementById("winRevealWord");
+    this.loseRevealWord = document.getElementById("loseRevealWord");
+    this.winPlayAgainButton = document.getElementById("winPlayAgainButton");
+    this.losePlayAgainButton = document.getElementById("losePlayAgainButton");
 
     // --- Game Data ---
     this.words = [
@@ -45,11 +46,15 @@ export class HangmanGame {
     this.displayWord();
     this.createKeyboard();
     this.updateFigure();
-    this.popupContainer.classList.remove("visible");
+    this.gameContent.style.display = "block";
+    this.winScreen.style.display = "none";
+    this.loseScreen.style.display = "none";
 
     // Ensure the event listener is attached
-    this.playAgainButton.removeEventListener("click", this.boundStartGame); // remove previous before adding
-    this.playAgainButton.addEventListener("click", this.boundStartGame);
+    this.winPlayAgainButton.removeEventListener("click", this.boundStartGame); // remove previous before adding
+    this.winPlayAgainButton.addEventListener("click", this.boundStartGame);
+    this.losePlayAgainButton.removeEventListener("click", this.boundStartGame); // remove previous before adding
+    this.losePlayAgainButton.addEventListener("click", this.boundStartGame);
   }
 
   /**
@@ -69,7 +74,7 @@ export class HangmanGame {
     // Check for win
     const innerWord = this.wordDisplay.innerText.replace(/\n/g, "");
     if (innerWord === this.selectedWord) {
-      this.showPopup(true);
+      this.showWinScreen();
     }
   }
 
@@ -117,18 +122,26 @@ export class HangmanGame {
 
     // Check for loss
     if (this.wrongGuesses >= this.maxWrongGuesses) {
-      this.showPopup(false);
+      this.showLoseScreen();
     }
   }
 
   /**
-   * Shows the final win/loss popup message.
-   * @param {boolean} isWin - Whether the player won or lost.
+   * Shows the win screen.
    */
-  showPopup(isWin) {
-    this.finalMessage.textContent = isWin ? "YOU WIN!" : "GAME OVER";
-    this.finalMessageRevealWord.textContent = `The word was: ${this.selectedWord}`;
-    this.popupContainer.classList.add("visible");
+  showWinScreen() {
+    this.gameContent.style.display = "none";
+    this.winScreen.style.display = "block";
+    this.winRevealWord.textContent = `The word was: ${this.selectedWord}`;
+  }
+
+  /**
+   * Shows the lose screen.
+   */
+  showLoseScreen() {
+    this.gameContent.style.display = "none";
+    this.loseScreen.style.display = "block";
+    this.loseRevealWord.textContent = `The word was: ${this.selectedWord}`;
   }
 
   /**
@@ -136,9 +149,7 @@ export class HangmanGame {
    */
   destroy() {
     console.log("Hangman Destroyed!");
-    this.playAgainButton.removeEventListener("click", this.boundStartGame);
-    // Note: Keyboard listeners are on elements that get removed anyway,
-    // so cleaning them up is less critical, but removing the playAgainButton
-    // listener is important.
+    this.winPlayAgainButton.removeEventListener("click", this.boundStartGame);
+    this.losePlayAgainButton.removeEventListener("click", this.boundStartGame);
   }
 }
