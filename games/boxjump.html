@@ -1,0 +1,65 @@
+<style>
+  .game-container {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    gap: 20px;
+  }
+
+  h1 {
+    color: #ff00ff;
+    font-size: 2rem;
+    text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 20px #ff00ff,
+      0 0 40px #ff00ff;
+    margin-bottom: 10px;
+  }
+
+  #score {
+    color: #00ffff;
+    font-size: 1.5rem;
+    text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+  }
+
+  canvas {
+    background-color: #0a0a0a;
+    border: 3px solid #00ffff;
+    box-shadow: 0 0 20px #00ffff;
+    border-radius: 8px;
+    width: 100%;
+    height: auto;
+    max-height: 40vh;
+  }
+
+  /* Restart button styling */
+  #restartButton {
+    font-family: "Press Start 2P", cursive;
+    background-color: #1a1a1a;
+    color: #ff9900; /* Neon Orange */
+    border: 2px solid #ff9900;
+    box-shadow: 0 0 10px #ff9900;
+    padding: 15px 30px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    display: none; /* Hidden by default */
+  }
+
+  /* Restart button hover effect */
+  #restartButton:hover {
+    background-color: #ff9900;
+    color: #000;
+    box-shadow: 0 0 20px #ff9900, 0 0 30px #ff9900;
+  }
+</style>
+<button class="back-button" onclick="loadScreen('game-selector')">←</button>
+<div class="game-container">
+  <h1>Box Jumper</h1>
+  <p id="score">Score: 0</p>
+  <canvas id="gameCanvas" width="500" height="600"></canvas>
+  <button id="restartButton">Restart</button>
+</div>
