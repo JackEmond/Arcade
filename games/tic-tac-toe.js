@@ -23,9 +23,11 @@ export class TicTacToeGame {
   }
 
   // --- Messages ---
-  winningMessage = () => `Player ${this.currentPlayer} Wins!`;
+  winningMessage = () =>
+    this.currentPlayer === "X" ? "You Win!" : "Computer Wins!";
   drawMessage = () => `Game Ended in a Draw!`;
-  currentPlayerTurn = () => `Player ${this.currentPlayer}'s Turn`;
+  currentPlayerTurn = () =>
+    this.currentPlayer === "X" ? "Your Turn" : "Computer's Turn";
 
   init() {
     this.gameActive = true;
@@ -47,7 +49,15 @@ export class TicTacToeGame {
     const clickedCellIndex = parseInt(
       clickedCell.getAttribute("data-cell-index")
     );
-    if (this.gameState[clickedCellIndex] !== "" || !this.gameActive) return;
+
+    if (
+      this.gameState[clickedCellIndex] !== "" ||
+      !this.gameActive ||
+      this.currentPlayer === "O"
+    ) {
+      return;
+    }
+
     this.handleCellPlayed(clickedCell, clickedCellIndex);
     this.handleResultValidation();
   }
@@ -89,6 +99,85 @@ export class TicTacToeGame {
   handlePlayerChange() {
     this.currentPlayer = this.currentPlayer === "X" ? "O" : "X";
     this.gameStatus.textContent = this.currentPlayerTurn();
+
+    if (this.currentPlayer === "O" && this.gameActive) {
+      setTimeout(() => this.computerMove(), 500);
+    }
+  }
+
+  computerMove() {
+    const bestMove = this.minimax(this.gameState, "O").index;
+    const cellToPlay = this.cells[bestMove];
+    this.handleCellPlayed(cellToPlay, bestMove);
+    this.handleResultValidation();
+  }
+
+  minimax(newGameState, player) {
+    const availableSpots = newGameState
+      .map((cell, index) => (cell === "" ? index : null))
+      .filter((index) => index !== null);
+
+    // Check for terminal states (win, lose, draw)
+    if (this.checkWin(newGameState, "X")) {
+      return { score: -10 };
+    } else if (this.checkWin(newGameState, "O")) {
+      return { score: 10 };
+    } else if (availableSpots.length === 0) {
+      return { score: 0 };
+    }
+
+    const moves = [];
+
+    for (let i = 0; i < availableSpots.length; i++) {
+      const move = {};
+      move.index = availableSpots[i];
+      newGameState[availableSpots[i]] = player;
+
+      if (player === "O") {
+        const result = this.minimax(newGameState, "X");
+        move.score = result.score;
+      } else {
+        const result = this.minimax(newGameState, "O");
+        move.score = result.score;
+      }
+
+      newGameState[availableSpots[i]] = ""; // Undo the move
+      moves.push(move);
+    }
+
+    let bestMove;
+    if (player === "O") {
+      let bestScore = -10000;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].score > bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    } else {
+      let bestScore = 10000;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].score < bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    }
+
+    return moves[bestMove];
+  }
+
+  checkWin(board, player) {
+    for (const condition of this.winningConditions) {
+      if (
+        board[condition[0]] === player &&
+        board[condition[1]] === player &&
+        board[condition[2]] === player
+      ) {
+        return true;
+      }
+    }
+    return false;
   }
 
   handleRestartGame() {
