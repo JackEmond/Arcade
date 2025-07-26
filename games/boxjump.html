@@ -7,6 +7,7 @@
     align-items: center;
     margin: auto;
     gap: 20px;
+    position: relative; /* Added for positioning context */
   }
 
   h1 {
@@ -15,12 +16,6 @@
     text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 20px #ff00ff,
       0 0 40px #ff00ff;
     margin-bottom: 10px;
-  }
-
-  #score {
-    color: #00ffff;
-    font-size: 1.5rem;
-    text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
   }
 
   canvas {
@@ -47,6 +42,10 @@
     transition: all 0.2s ease;
     text-transform: uppercase;
     display: none; /* Hidden by default */
+    position: absolute;
+    top: 60%; /* Positioned below game over text */
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   /* Restart button hover effect */
@@ -59,7 +58,6 @@
 <button class="back-button" onclick="loadScreen('game-selector')">←</button>
 <div class="game-container">
   <h1>Box Jumper</h1>
-  <p id="score">Score: 0</p>
   <canvas id="gameCanvas" width="500" height="600"></canvas>
   <button id="restartButton">Restart</button>
 </div>

@@ -3,7 +3,6 @@ export class BoxjumpGame {
     // --- DOM Elements ---
     this.canvas = document.getElementById("gameCanvas");
     this.ctx = this.canvas.getContext("2d");
-    this.scoreElement = document.getElementById("score");
     this.restartButton = document.getElementById("restartButton");
 
     // --- Game Configuration ---
@@ -48,7 +47,6 @@ export class BoxjumpGame {
     this.gameSpeed = 4;
     this.gameOver = false;
     this.obstacleTimer = 150; // Initial delay before first obstacle
-    this.scoreElement.textContent = "Score: 0";
     this.restartButton.style.display = "none";
 
     // Start the game loop
@@ -145,7 +143,6 @@ export class BoxjumpGame {
       if (!obstacle.passed && obstacle.x + obstacle.width < this.player.x) {
         obstacle.passed = true;
         this.score++;
-        this.scoreElement.textContent = `Score: ${this.score}`;
         // Increase speed slightly with score
         if (this.score % 5 === 0) {
           this.gameSpeed += 0.2;
@@ -201,10 +198,23 @@ export class BoxjumpGame {
     // Reset shadow for UI elements
     this.ctx.shadowBlur = 0;
 
+    // Draw the score
+    this.drawScore();
+
     // Draw Game Over screen
     if (this.gameOver) {
       this.drawGameOver();
     }
+  }
+
+  drawScore() {
+    this.ctx.textAlign = "left";
+    this.ctx.font = "20px 'Press Start 2P'";
+    this.ctx.fillStyle = "#00ffff"; // Neon Cyan
+    this.ctx.shadowColor = "#00ffff";
+    this.ctx.shadowBlur = 10;
+    this.ctx.fillText(`Score: ${this.score}`, 20, 40);
+    this.ctx.shadowBlur = 0; // Reset shadow
   }
 
   drawGameOver() {
